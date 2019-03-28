@@ -1,25 +1,10 @@
-namespace Traffic {
+import { Node, Edge, Graph } from './src';
 
-  class Node {
-    constructor(public data: any = {}, public edges?: Edge[]) {}
-  }
+(function() {
 
-  class Edge {
-    constructor(public data: any = {}, public start?: Node, public end?: Node) {}
-  }
+  let g = new Graph();
 
-  class Graph {
-    constructor(public nodes: Node[] = [], public edges: Edge[] = []) {}
-  }
+  
 
-  (function() {
-
-    let g = new Graph();
-
-    // g.build();
-
-  })();
-
-
-}
+})();
 
