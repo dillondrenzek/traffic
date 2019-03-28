@@ -9,24 +9,34 @@ export class Graph {
   ) { }
 
   addNode(node: Node) { 
-    this.nodes.push(node);
+    if (!this.getNodeById(node._id)) {
+      this.nodes.push(node);
+    }
+  }
+
+  getNodeById(_id: number): Node {
+    return this.nodes.length ? this.nodes.find((n) => n._id === _id) : null;
   }
 
   addEdge(edge: Edge) { 
     this.edges.push(edge);
   }
 
-  connect(startNode: Node, edge: Edge, endNode: Node) {
+  connect(startNode: Node, edge: Edge, endNode?: Node) {
     // add to graph
     this.addNode(startNode);
-    this.addNode(endNode);
     this.addEdge(edge);
-    
+    if (endNode) {
+      this.addNode(endNode);
+    }
+
     // connect Nodes and Edges
     startNode.edges.push(edge);
-    endNode.edges.push(edge);
     edge.start = startNode;
-    edge.end = endNode;
+    if (endNode) {
+      endNode.edges.push(edge);
+      edge.end = endNode;
+    }
   }
 
   print() {
