@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
-import { LightState } from '../light';
+import * as Traffic from '../traffic';
 import './Stoplight.css';
 
 
 export interface StoplightProps {
-  state: LightState;
+  className?: string;
+  state: Traffic.LightState;
 }
 
 export class Stoplight extends Component<StoplightProps, {}> {
   render() {
     const {
+      className,
       state
     } = this.props;
     const classNames = [
       'Stoplight',
-      `state-${state}`
+      `state-${state}`,
+      className || ''
     ].join(' ');
 
     return (

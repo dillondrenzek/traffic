@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import {Stoplight, LightState, Intersection, IntersectionState, Direction} from './traffic';
+import {LightState, Intersection, IntersectionState, Direction} from './traffic';
+
+import * as UI from './components';
 
 interface AppState {
-  intersection: IntersectionState;
+  runtime: number;
+  intersection: Intersection;
+  intersectionState: IntersectionState;
   intersectionUpdate: any;
 }
 
-class App extends Component<{}, AppState> {
-
-  public intersection = new Intersection()
+const getIntersection = () => {
+  return new Intersection()
     .addStage({
       north: LightState.Green,
       south: LightState.Green
@@ -35,30 +38,54 @@ class App extends Component<{}, AppState> {
       east: LightState.Red,
       west: LightState.Red
     }, 1000);
+}
+
+class App extends Component<{}, AppState> {
 
   constructor(props: {}) {
     super(props);
 
+    const intersection = getIntersection();
+
     this.state = {
-      intersection: this.intersection.state,
+      runtime: 0,
+      intersection,
+      intersectionState: intersection.state,
       intersectionUpdate: null
     }
   }
 
   componentDidMount() {
-    // run the intersection simulation
-    this.intersection.run();
+
+  }
+
+  stopSimulation = () => {
+    // Clear interval
+    if (this.state.intersectionUpdate) {
+      clearInterval(this.state.intersectionUpdate);
+    }
+  }
+
+  resetIntersection = () => {
+    this.stopSimulation();
+    
+    const intersection = getIntersection();
 
     // periodically poll simulation to update state
+    const updatePeriod = 100;
     const intersectionUpdate = setInterval(() => {
-      const intersection = this.intersection.state;
       this.setState({
-        intersection
+        runtime: this.state.runtime + updatePeriod,
+        intersectionState: this.state.intersection.state
       });
-    }, 100);
+    }, updatePeriod);
 
-    // update state with intersection update
+    intersection.run();
+
     this.setState({
+      runtime: 0,
+      intersection,
+      intersectionState: intersection.state,
       intersectionUpdate
     });
   }
@@ -66,15 +93,33 @@ class App extends Component<{}, AppState> {
   render() {
 
     const {
+      runtime,
       intersection
     } = this.state;
 
     return (
       <div className="App">
-        <Stoplight state={intersection.north} />
-        <Stoplight state={intersection.south} />
-        <Stoplight state={intersection.west} />
-        <Stoplight state={intersection.east} />
+
+        <div className="Console">
+          <div>
+            <button onClick={this.stopSimulation}>
+              Stop
+            </button>
+            <button onClick={this.resetIntersection}>
+              Restart
+            </button>
+          </div>
+          <code>
+            <pre>
+              Runtime: {runtime}
+            </pre>
+          </code>
+        </div>
+
+        <div className="Display">
+          <UI.Intersection intersection={intersection} />
+        </div>
+
       </div>
     );
   }

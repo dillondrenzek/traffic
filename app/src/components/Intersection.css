@@ -1,0 +1,27 @@
+.Intersection {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.Stoplight {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.Stoplight.north {
+  top: 25%;
+  left: 50%;
+}
+.Stoplight.east {
+  top: 50%;
+  left: 75%;
+}
+.Stoplight.west {
+  top: 50%;
+  left: 25%;
+}
+.Stoplight.south {
+  top: 75%;
+  left: 50%;
+}
