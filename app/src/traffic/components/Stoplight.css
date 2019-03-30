@@ -2,3 +2,13 @@
   height: 100px;
   width: 100px;
 }
+
+.state-red {
+  background: rgb(173, 56, 56);
+}
+.state-yellow {
+  background: rgb(235, 207, 53);
+}
+.state-green {
+  background: rgb(100, 175, 15);
+}

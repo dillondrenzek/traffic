@@ -18,7 +18,7 @@ export class Intersection {
   private sequence: IntersectionStage[] = [];
   private sequenceTimers: any[] = [];
   private time = 0;
-  private state: IntersectionState;
+  private _state: IntersectionState;
 
   constructor(public initialState: IntersectionState = {
     north: LightState.Red,
@@ -26,24 +26,28 @@ export class Intersection {
     west: LightState.Red,
     east: LightState.Red,
   }) {
-    this.state = initialState;
+    this._state = initialState;
+  }
+
+  get state(): IntersectionState {
+    return this._state;
   }
 
   print = () => {
-    Object.keys(this.state).forEach((dir: string) => {
-      const light = this.state[(dir as Direction)];
+    Object.keys(this._state).forEach((dir: string) => {
+      const light = this._state[(dir as Direction)];
       console.log(dir, light);
     });
     console.log('\n');
   }
 
-  addStage = (fn: () => IntersectionStateDelta, duration: number) => {
-    this.sequence.push({ state: Object.assign({}, this.state, fn()), duration });
+  addStage = (delta: IntersectionStateDelta, duration: number) => {
+    this.sequence.push({ state: Object.assign({}, this._state, delta), duration });
     return this;
   }
 
   private scheduleStage = (stage: IntersectionStage) => {
-    const timer = setTimeout(() => this.state = stage.state, this.time);
+    const timer = setTimeout(() => this._state = stage.state, this.time);
     this.sequenceTimers.push(timer);
 
     this.time += stage.duration;

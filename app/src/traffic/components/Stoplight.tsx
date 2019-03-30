@@ -9,9 +9,12 @@ export interface StoplightProps {
 
 export class Stoplight extends Component<StoplightProps, {}> {
   render() {
+    const {
+      state
+    } = this.props;
     const classNames = [
       'Stoplight',
-
+      `state-${state}`
     ].join(' ');
 
     return (
