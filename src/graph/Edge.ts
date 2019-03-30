@@ -11,4 +11,20 @@ export class Edge<T = any> extends Base<T> {
     super(data); 
   }
 
+
+  print({
+    printNodes = false,
+    graphical = false
+  } = {}): string {
+    const printSelf = () => `[ ${this.toString()} ]`;
+    const printStartNode = () => { return `${this.start ? this.start.print({ graphical: true }) + ' -> ' : ''}` };
+    const printEndNode = () => { return `${this.end ? ' -> ' + this.end.print({ graphical: true }) : ''}` };
+
+    return [
+      (printNodes) ? printStartNode() : '',
+      printSelf(),
+      (printNodes) ? printEndNode() : '',
+    ].join('');
+  }
+
 }

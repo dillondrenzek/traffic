@@ -11,4 +11,22 @@ export class Node<T = any> extends Base<T> {
     super(data); 
   }
 
+  print({
+    printEdges = false,
+    graphical = false
+  } = {}): string {
+    const printSelf = () => `( ${this.toString()} )`;
+
+
+    return graphical 
+    ? [
+        printSelf()
+      ].join('')
+    : [
+        printSelf(),
+        (printEdges) ? '\n' : '',
+        (printEdges) ? this.edges.map((e) => `     - ` + e.print({ graphical: true })).join('\n') : '',
+      ].join('');
+  }
+
 }

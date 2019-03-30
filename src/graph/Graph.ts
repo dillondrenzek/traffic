@@ -1,28 +1,39 @@
 import { Node } from './Node';
 import { Edge } from './Edge';
 
-export class Graph {
+export class Graph<N extends Node, E extends Edge> {
+
 
   constructor(
-    private nodes: Node[] = [], 
-    private edges: Edge[] = []
+    private nodes: N[] = [], 
+    private edges: E[] = []
   ) { }
 
-  addNode(node: Node) { 
+  addNode(node: N) { 
     if (!this.getNodeById(node._id)) {
       this.nodes.push(node);
     }
+    return this;
   }
 
-  getNodeById(_id: number): Node {
-    return this.nodes.length ? this.nodes.find((n) => n._id === _id) : null;
+  private getNodeById(_id: number): N {
+    return this.nodes.length 
+      ? this.nodes.find((n) => n._id === _id) 
+      : null;
   }
 
-  addEdge(edge: Edge) { 
+  addEdge(edge: E) { 
     this.edges.push(edge);
+    return this;
   }
 
-  connect(startNode: Node, edge: Edge, endNode?: Node) {
+  connectNodes(start: N, end: N) {
+    this.addNode(start);
+    this.addNode(end);
+    return this;
+  }
+
+  connect(startNode: N, edge: E, endNode?: N) {
     // add to graph
     this.addNode(startNode);
     this.addEdge(edge);
@@ -37,25 +48,19 @@ export class Graph {
       endNode.edges.push(edge);
       edge.end = endNode;
     }
+    return this;
   }
 
   print() {
-    console.log('Nodes');
-    this.nodes.forEach((n) => {
-      console.log(n.toString());
-      n.edges.forEach((e) => {
-        console.log(' ->', e.toString())
-      })
-    })
-    console.log('\n');
-    console.log('Edges');
-    this.edges.forEach((e) => {
-      console.log(
-        (e.start) ? `${e.start.toString()} -`: '',
-        e.toString(),
-        (e.end) ? `- ${e.end.toString()}`: ''
-      );
-    })
+    return [
+      'Nodes',
+      '',
+      this.nodes.map((n) => n.print({ printEdges: true })).join('\n'),
+      '\n\n\n',
+      'Edges',
+      '',
+      this.edges.map((e) => e.print({printNodes: true})).join('\n')
+    ].join('\n');
   }
   
 }
