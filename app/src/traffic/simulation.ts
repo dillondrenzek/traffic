@@ -30,6 +30,10 @@ export class Simulation<T> {
     this.currentStageIndex = 0;
   }
 
+  public get stages(): Stage<T>[] {
+    return this.sequence;
+  }
+
   public get state(): T {
     return this._state;
   }
