@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import {LightState, Intersection, IntersectionState, Direction} from './traffic';
+import {LightState, Intersection, IntersectionState, Direction, Simulation} from './traffic';
 
 import * as UI from './components';
 
-interface AppState {
-  runtime: number;
-  intersection: Intersection;
-  intersectionState: IntersectionState;
-  intersectionUpdate: any;
-}
+// interface AppState {
+//   runtime: number;
+//   intersection: Intersection;
+//   intersectionState: IntersectionState;
+//   intersectionUpdate: any;
+// }
 
 const getIntersection = () => {
   return new Intersection()
@@ -40,16 +40,21 @@ const getIntersection = () => {
     }, 1000);
 }
 
-class App extends Component<{}, AppState> {
+class App extends Component<{}, any> {
 
   constructor(props: {}) {
     super(props);
 
     const intersection = getIntersection();
+    const simulation = new Simulation(
+      intersection.initialState,
+      100
+    )
 
     this.state = {
       runtime: 0,
       intersection,
+      simulation,
       intersectionState: intersection.state,
       intersectionUpdate: null
     }
